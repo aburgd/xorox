@@ -75,6 +75,20 @@ func getInfo() ([]string, int) {
 	return pass, length
 }
 
+func encodeNoPad(by []byte) string {
+	str := base64.StdEncoding.EncodeToString(by)
+	str = strings.TrimSuffix(str, "==")
+	str = strings.TrimSuffix(str, "=")
+	return str
+}
+
+func trunc(str string, length int) string {
+	if len(str) == length {
+		return str
+	}
+	return str[0:length]
+}
+
 func main() {
 	iter := rand.Intn(8192)
 	pass, length := getInfo()
@@ -83,8 +97,10 @@ func main() {
 	salt, _ := randomBytes(4)
 	sha512 := sha512.New
 	newPass := trim(pbkdf2.Key(bPass, salt, iter, length, sha512))
-	fmt.Printf("pass for %s@%s: %s",
+	noPad := encodeNoPad(newPass)
+	noPad = trunc(noPad, length)
+	fmt.Printf("pass for %s@%s: %s\n",
 		pass[1],
 		pass[0],
-		base64.URLEncoding.EncodeToString(newPass))
+		noPad)
 }
