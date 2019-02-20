@@ -1,5 +1,5 @@
 # xorox
-some dumb way to generate passwords with base64 and key-stretching pbkdf2
+one way to generate passwords with base64 and key-stretching pbkdf2
 
 ## running
 `git clone https://github.com/aburgd/xorox.git`
